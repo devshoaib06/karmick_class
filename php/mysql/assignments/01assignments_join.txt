@@ -1,0 +1,87 @@
+1.Questions Based on JOINS
+-----------------------------------------------------------
+1. List the names of all students along with the subjects they are enrolled in.
+
+SELECT 
+    Students.name AS student_name, 
+    Subjects.subject_name 
+FROM 
+    Scores 
+JOIN 
+    Students ON Scores.student_id = Students.student_id 
+JOIN 
+    Subjects ON Scores.subject_id = Subjects.subject_id;
+
+2. Find the marks obtained by each student in every subject.
+
+SELECT 
+    Students.name AS student_name, 
+    Subjects.subject_name,
+    Scores.marks
+FROM 
+    Scores 
+JOIN 
+    Students ON Scores.student_id = Students.student_id 
+JOIN 
+    Subjects ON Scores.subject_id = Subjects.subject_id;
+
+
+3. Identify students who scored less than 50 marks in any subject.
+
+    SELECT 
+    Students.name AS student_name, 
+    Subjects.subject_name,
+    Scores.marks
+FROM 
+    Scores 
+JOIN 
+    Students ON Scores.student_id = Students.student_id 
+JOIN 
+    Subjects ON Scores.subject_id = Subjects.subject_id    
+ WHERE marks <50;
+
+4. Retrieve students who scored more than 80 marks in any subject.
+
+SELECT 
+    Students.name AS student_name, 
+    Subjects.subject_name,
+    Scores.marks
+FROM 
+    Scores 
+JOIN 
+    Students ON Scores.student_id = Students.student_id 
+JOIN 
+    Subjects ON Scores.subject_id = Subjects.subject_id    
+ WHERE marks >80;
+
+5. Find the subjects in which no student has scored marks yet.
+
+SELECT 
+    Subjects.subject_name
+FROM 
+    Scores 
+Right JOIN 
+    Subjects ON Scores.subject_id = Subjects.subject_id    
+    where marks is Null;
+
+6. List students along with the subjects where they scored exactly the same marks.
+
+SELECT s1.student_id, s2.student_id, s1.subject_id, s1.marks FROM Scores s1 JOIN Scores s2 ON s1.subject_id = s2.subject_id AND s1.marks = s2.marks AND s1.student_id > s2.student_id;
+
+
+2. Questions Based on GROUP BY
+-----------------------------------------------------------
+1. Retrieve the total marks scored by each student.
+2. Find the average marks scored by students in each subject.
+3. Retrieve the total number of students enrolled in each subject.
+4. Find the subject with the highest average marks scored.
+5. Retrieve the highest marks obtained in each subject.
+
+
+3. Questions Based on HAVING
+-----------------------------------------------------------
+1. List the names of students who scored more than 80 marks in any subject (after grouping).
+2. Identify students who scored more than 200 marks across all subjects combined.
+3. List all the subjects in which at least one student scored below 40.
+4. Identify male and female students who have scored above 90 marks in any subject.
+5. Retrieve students who scored the highest total marks across all subjects (after filtering).

@@ -1,0 +1,215 @@
+1.Questions Based on JOINS
+-----------------------------------------------------------
+1. List the names of all students along with the subjects they are enrolled in.
+2. Find the marks obtained by each student in every subject.
+3. Identify students who scored less than 50 marks in any subject.
+4. Retrieve students who scored more than 80 marks in any subject.
+5. Find the subjects in which no student has scored marks yet.
+6. List students along with the subjects where they scored exactly the same marks.
+
+
+2. Questions Based on GROUP BY
+-----------------------------------------------------------
+1. Retrieve the total marks scored by each student.
+2. Find the average marks scored by students in each subject.
+3. Retrieve the total number of students enrolled in each subject.
+4. Find the subject with the highest average marks scored.
+5. Retrieve the highest marks obtained in each subject.
+
+
+3. Questions Based on HAVING
+-----------------------------------------------------------
+1. List the names of students who scored more than 80 marks in any subject (after grouping).
+2. Identify students who scored more than 200 marks across all subjects combined.
+3. List all the subjects in which at least one student scored below 40.
+4. Identify male and female students who have scored above 90 marks in any subject.
+5. Retrieve students who scored the highest total marks across all subjects (after filtering).
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.  (JOINS ANSWER...............)
+
+
+
+
+<--------------------------------------------------------->
+
+
+
+
+
+
+1.  SELECT Students.name AS student_name, Subjects.subject_name
+FROM Students
+JOIN Scores ON Students.student_id = Scores.student_id
+JOIN Subjects ON Scores.subject_id = Subjects.subject_id;
+
+
+
+
+2.  SELECT Students.name AS student_name, Subjects.subject_name, Scores.marks
+FROM Students
+JOIN Scores ON Students.student_id = Scores.student_id
+JOIN Subjects ON Scores.subject_id = Subjects.subject_id;
+
+
+
+
+3.  SELECT DISTINCT Students.name AS student_name
+FROM Students
+JOIN Scores ON Students.student_id = Scores.student_id
+WHERE Scores.marks < 50;
+
+
+
+
+4.  SELECT DISTINCT Students.name AS student_name
+FROM Students
+JOIN Scores ON Students.student_id = Scores.student_id
+WHERE Scores.marks > 80;
+
+
+
+
+5.  SELECT Subjects.subject_name
+FROM Subjects
+LEFT JOIN Scores ON Subjects.subject_id = Scores.subject_id
+WHERE Scores.marks IS NULL;
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2.    (GROUP BY ANSWER..................)
+
+
+
+
+<------------------------------------------->
+
+
+
+1.  SELECT Students.name AS student_name, SUM(Scores.marks) AS total_marks
+FROM Students
+JOIN Scores ON Students.student_id = Scores.student_id
+GROUP BY Students.student_id;
+
+
+
+
+
+2.  SELECT Subjects.subject_name, AVG(Scores.marks) AS average_marks
+FROM Subjects
+JOIN Scores ON Subjects.subject_id = Scores.subject_id
+GROUP BY Subjects.subject_id;
+
+
+
+
+3.   SELECT Subjects.subject_name, COUNT(DISTINCT Scores.student_id) AS total_students
+FROM Subjects
+JOIN Scores ON Subjects.subject_id = Scores.subject_id
+GROUP BY Subjects.subject_id;
+
+
+
+
+4.  SELECT Subjects.subject_name
+FROM Subjects
+JOIN Scores ON Subjects.subject_id = Scores.subject_id
+GROUP BY Subjects.subject_id
+ORDER BY AVG(Scores.marks) DESC
+LIMIT 1;
+
+
+
+
+
+5.   SELECT Subjects.subject_name, MAX(Scores.marks) AS highest_marks
+FROM Subjects
+JOIN Scores ON Subjects.subject_id = Scores.subject_id
+GROUP BY Subjects.subject_id;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3.  (HAVING ANSWER............)
+
+
+
+<----------------------------------------->
+
+
+
+
+1.  SELECT Students.name AS student_name
+FROM Students
+JOIN Scores ON Students.student_id = Scores.student_id
+GROUP BY Students.student_id
+HAVING MAX(Scores.marks) > 80;
+
+
+
+
+
+2.       SELECT Students.name AS student_name, SUM(Scores.marks) AS total_marks
+FROM Students
+JOIN Scores ON Students.student_id = Scores.student_id
+GROUP BY Students.student_id
+HAVING total_marks > 200;
+
+
+
+
+
+3.     SELECT DISTINCT Subjects.subject_name
+FROM Subjects
+JOIN Scores ON Subjects.subject_id = Scores.subject_id
+WHERE Scores.marks < 40;
+
+
+
+
+
+
+4.   SELECT Students.name AS student_name, Students.gender
+FROM Students
+JOIN Scores ON Students.student_id = Scores.student_id
+WHERE Scores.marks > 90;
+
+
+
+
+Retrieve students who scored the highest total marks across all subjects (after filtering).
+
+5.   SELECT Students.name AS student_name, SUM(Scores.marks) AS total_marks
+FROM Students
+JOIN Scores ON Students.student_id = Scores.student_id
+GROUP BY Students.student_id
+HAVING total_marks = (SELECT MAX(total_marks)
+                      FROM (SELECT SUM(marks) AS total_marks
+                            FROM Scores
+                            GROUP BY student_id) AS subquery); 
+
+
+
+SELECT 
+    Students.name AS student_name, 
+    SUM(Scores.marks) AS total_marks
+FROM 
+    Scores
+JOIN 
+    Students ON Scores.student_id = Students.student_id
+GROUP BY 
+    Students.student_id, Students.name
+ORDER BY 
+    total_marks DESC
+LIMIT 1;
+
+
+
+ ------------------------------------------------FINISH-----------------------------------------------------------------------------------------------------------------                           
+

@@ -3,7 +3,7 @@
 require_once "config.php";
 
 // Define variables and initialize with empty values
-$name = $address = $salary = "";
+$name = $address = $salary =$status="";
 $name_err = $address_err = $salary_err = "";
 
 
@@ -52,6 +52,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $salary = $input_salary;
     }
 
+    if(isset($_POST["status"])){
+
+        $input_status = trim($_POST["status"]);
+        $is_active = $input_status;
+    }else{
+        $is_active=0;
+    }
+    // echo "<pre>";
+    // print_r($is_active);die;
+    // echo "</pre>";
+
     // Check input errors before inserting in database
     if (empty($name_err) && empty($address_err) && empty($salary_err)) {
         if(!empty($_POST['empid'])){
@@ -60,7 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // $sql = "INSERT INTO employees (name, address, salary) VALUES ($name ,$address,$salary)";
             $sql = "UPDATE  employees set name = '" . $name . "',
                                           address= '" . $address . "',
-                                          salary = '".$salary."'
+                                          salary = '".$salary."',
+                                          status = '".$is_active."'
                                           where id = ".$empid;
             // echo $sql;
             // die;
@@ -135,6 +147,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col-md-12">
                     <h2 class="mt-5"><?php if(!empty($row['id'])){echo "Update";}else{echo "Create";}?> Record</h2>
                     <p>Please fill this form and submit to add employee record to the database.</p>
+                    <?php 
+                        // echo "<pre>";
+                        // print_r($row);
+                        // echo "</pre>";
+                    ?>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <div class="form-group">
                             <label>Name</label>
@@ -150,6 +167,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label>Salary</label>
                             <input type="text" name="salary" class="form-control <?php echo (!empty($salary_err)) ? 'is-invalid' : ''; ?>" value="<?php if(!empty($row['salary'])){echo $row['salary'];}?>">
                             <span class="invalid-feedback"><?php echo $salary_err; ?></span>
+                        </div>
+                        <div class="form-group">
+                        <input class="form-check-input" type="checkbox" value="1" name ="status" id="flexCheckChecked" 
+                        <?php if(!empty($row['status'])){
+                           if($row['status']==1){
+                            echo "checked";
+                           }
+                            
+                        }?>
+                        >
+  <label class="form-check-label" for="flexCheckChecked">
+    Is Active   <?php if(!empty($row['status'])){echo $row['status'];}?>
+  </label>
                         </div>
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>

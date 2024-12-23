@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="mt-5 mb-3 clearfix">
-                        <h2 class="pull-left">Employees Details</h2>
+                        <h2 class="pull-left">Employees Detail</h2>
                         <a href="create.php" class="btn btn-primary pull-right btn_color"><i class="fa fa-plus"></i> Add New
                             Employee</a>
                     </div>
